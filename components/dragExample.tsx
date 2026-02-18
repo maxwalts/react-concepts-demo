@@ -1,65 +1,60 @@
+"use client"
 import { useState } from "react"
 
-
+const CARD_LABEL = "Drag me!"
 
 export default function DragExample() {
-    const [data1, setData1] = useState("hi")
-    const [data2, setData2] = useState("")
+    const [isDropped, setIsDropped] = useState(false)
+    const [isDragOver, setIsDragOver] = useState(false)
+
     return (
-        <>
-            <p className="font-bold">Drag example</p>
-            <p>type something in the second div and drag it into the first</p>
-            <div
-                onDragStart={(event) => {
-                    console.log(event)
-                    event.dataTransfer.setData('text/plain', data1)
-                }}
-                onDragOver={(event) => {
-                    event.preventDefault()
-                }}
-                onDrop={(event) => {
-                    event.preventDefault()
-                    console.log(event)
-                    const data = event.dataTransfer.getData('text/plain');
-                    console.log(data)
-                    setData1(data)
-                    setData2("")
-
-                }}
-                className=" bg-slate-500 w-8 h-8" draggable="true">
-                {data1}
-
-            </div>
-
-            <div
-                onDragStart={(event) => {
-                    console.log(event)
-                    event.dataTransfer.setData('text/plain', data2)
-                }}
-                onDragOver={(event) => {
-                    event.preventDefault()
-                }}
-                onDrop={(event) => {
-                    event.preventDefault()
-                    console.log(event)
-                    const data = event.dataTransfer.getData('text/plain');
-                    console.log(data)
-                    setData1("")
-                    setData2(data)
-
-                }}
-                className="w-12 h-12 flex content-center bg-slate-500" draggable="true" >
-                <input
-                    className="w-12 bg-slate-500"
-                    value={data2}
-                    onInput={e => {
-                        const value = e.currentTarget.value;
-                        setData2(value)
+        <div>
+            <p className="text-sm text-slate-500 mb-6">Drag the card into the drop zone.</p>
+            <div className="flex gap-10 items-center justify-center">
+                {/* Drop zone */}
+                <div
+                    onDragOver={(e) => { e.preventDefault(); setIsDragOver(true) }}
+                    onDragLeave={() => setIsDragOver(false)}
+                    onDrop={(e) => {
+                        e.preventDefault()
+                        const data = e.dataTransfer.getData('text/plain')
+                        if (data) {
+                            setIsDropped(true)
+                            setIsDragOver(false)
+                        }
                     }}
+                    className={`w-48 h-32 border-2 border-dashed rounded-xl flex items-center justify-center transition-colors ${
+                        isDragOver
+                            ? "border-blue-500 bg-blue-50"
+                            : "border-slate-400 bg-slate-50"
+                    }`}
                 >
-                </input>
-            </div>
-        </>
+                    {isDropped
+                        ? <span className="font-semibold text-blue-600">{CARD_LABEL}</span>
+                        : <span className="text-slate-400 text-sm">Drop here</span>
+                    }
+                </div>
 
+                {/* Draggable card or reset button */}
+                {!isDropped ? (
+                    <div
+                        draggable="true"
+                        onDragStart={(e) => {
+                            e.dataTransfer.setData('text/plain', CARD_LABEL)
+                        }}
+                        className="w-36 h-24 bg-blue-500 text-white rounded-xl flex items-center justify-center font-semibold cursor-grab active:cursor-grabbing shadow-md select-none text-sm"
+                    >
+                        {CARD_LABEL}
+                    </div>
+                ) : (
+                    <button
+                        onClick={() => setIsDropped(false)}
+                        className="text-sm text-slate-500 hover:text-slate-700 underline"
+                    >
+                        Reset
+                    </button>
+                )}
+            </div>
+        </div>
     )
 }

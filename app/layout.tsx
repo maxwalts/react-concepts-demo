@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Playground',
-  description: 'Creating some components',
+  title: 'React Concepts Demo',
+  description: 'Interactive examples exploring core React patterns: state, derived state, controlled inputs, drag events, and async fetch.',
 }
 
 export default function RootLayout({
