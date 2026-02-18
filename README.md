@@ -1,6 +1,6 @@
 # React Concepts Demo
 
-A small interactive app demonstrating core React patterns with Next.js and Tailwind CSS.
+A small interactive app demonstrating common React patterns
 
 ## Demos
 
